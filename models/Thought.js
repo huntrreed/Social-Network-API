@@ -1,33 +1,74 @@
 const { Schema, model } = require('mongoose');
-const assignmentSchema = require('./Assignment');
+const Schema = mongoose.Schema;
 
-// Schema to create Student model
-const studentSchema = new Schema(
+
+// Reaction schema as a subdocument of the Thought parent (based on the model in assignment README)
+const ReactionSchema = new Schema(
   {
-    first: {
+    reactionId: {
+      type: Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(), 
+    },
+    reactionBody: {
       type: String,
       required: true,
-      max_length: 50,
+      maxlength: 280, 
     },
-    last: {
+    username: {
       type: String,
       required: true,
-      max_length: 50,
     },
-    github: {
-      type: String,
-      required: true,
-      max_length: 50,
+    createdAt: {
+      type: Date,
+      default: Date.now, // sets default value to the current timestamp as per instructions
+      get: createdAtVal => createdAtVal.toISOString().split('T')[0], // the getter method to format the timestamp
     },
-    assignments: [assignmentSchema],
   },
   {
     toJSON: {
-      getters: true,
+      getters: true, 
     },
+    id: false, 
   }
 );
 
-const Student = model('student', studentSchema);
 
-module.exports = Student;
+// Thought/Parent schema/document
+const ThoughtSchema = new Schema(
+  {
+    thoughtText: {
+      type: String,
+      required: true,
+      minlength: 1, 
+      maxlength: 280, 
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now, 
+      get: createdAtVal => createdAtVal.toISOString().split('T')[0], // same getter method to format timestamp as above
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    // Adds reaction schema as a child/subdocument
+    reactions: [ReactionSchema],
+  },
+  {
+    toJSON: {
+      virtuals: true, // Enable the counter properties below
+      getters: true, // Enable getters for the timestamp thing
+    },
+    id: false,
+  }
+);
+
+//  `reactionCount` property gets the number of reactions per thought
+ThoughtSchema.virtual('reactionCount').get(function() {
+  return this.reactions.length;
+});
+
+// creates the Thought model using the ThoughtSchema after the THoughtSchema has been defined
+const Thought = mongoose.model('Thought', ThoughtSchema);
+
+module.exports = Thought;

@@ -1,34 +1,44 @@
 const { Schema, Types } = require('mongoose');
 
-const assignmentSchema = new Schema(
-  {
-    assignmentId: {
-      type: Schema.Types.ObjectId,
-      default: () => new Types.ObjectId(),
-    },
-    assignmentName: {
-      type: String,
-      required: true,
-      maxlength: 50,
-      minlength: 4,
-      default: 'Unnamed assignment',
-    },
-    score: {
-      type: Number,
-      required: true,
-      default: () => Math.floor(Math.random() * (100 - 70 + 1) + 70),
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
+//necessary user model info from assignment README
+const UserSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true,
   },
-  {
-    toJSON: {
-      getters: true,
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    match: [/.+\@.+\..+/, 'Please fill a valid email address'],
+  },
+  thoughts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Thought',
     },
-    id: false,
-  }
-);
+  ],
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
+},
+{
+  toJSON: {
+    virtuals: true,
+  },
+  id: false,
+});
 
-module.exports = assignmentSchema;
+// `friendCount` property that retrieves the length of the user's friends array field 
+UserSchema.virtual('friendCount').get(function() {
+  return this.friends.length;
+});
+
+const User = mongoose.model('User', UserSchema);
+
+module.exports = User;
