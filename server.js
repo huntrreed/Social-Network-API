@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Note to me --Middleware to parse URL-encoded bodies. Might not need this? Grabbed from mini project not sure yet if important
+// Middleware to parse URL-encoded bodies. 
 app.use(express.urlencoded({ extended: true })); 
 
 
@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/users', userRoutes);
 app.use('/api/thoughts', thoughtRoutes);
 
-
+// Similar to event listener, turning express server on once database is running
 db.once('open', () => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

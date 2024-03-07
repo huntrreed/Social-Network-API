@@ -1,7 +1,7 @@
-const { Schema, Types } = require('mongoose');
+const { Schema, Types, model } = require('mongoose');
 
 //necessary user model info from assignment README
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   username: {
     type: String,
     unique: true,
@@ -16,13 +16,13 @@ const UserSchema = new mongoose.Schema({
   },
   thoughts: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Thought',
     },
   ],
   friends: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
     },
   ],
@@ -39,6 +39,6 @@ UserSchema.virtual('friendCount').get(function() {
   return this.friends.length;
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = model('User', UserSchema);
 
 module.exports = User;

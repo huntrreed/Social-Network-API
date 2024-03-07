@@ -1,5 +1,5 @@
 {
-  "name": "28-Stu_Mini-Project",
+  "name": "SocialNetwork",
   "version": "1.0.1",
   "description": "Mongoose back-end project - Main",
   "main": "index.js",
@@ -10,6 +10,7 @@
     "seed": "node utils/seed"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.17.1",
     "mongoose": "^7.0.2"
   },

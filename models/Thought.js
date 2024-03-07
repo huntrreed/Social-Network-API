@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const Schema = mongoose.Schema;
 
 
 // Reaction schema as a subdocument of the Thought parent (based on the model in assignment README)
@@ -69,6 +68,6 @@ ThoughtSchema.virtual('reactionCount').get(function() {
 });
 
 // creates the Thought model using the ThoughtSchema after the THoughtSchema has been defined
-const Thought = mongoose.model('Thought', ThoughtSchema);
+const Thought = model('Thought', ThoughtSchema);
 
 module.exports = Thought;
