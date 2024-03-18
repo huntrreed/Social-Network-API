@@ -33,7 +33,7 @@ const ThoughtController = {
     try {
       const thought = await Thought.create(req.body);
       await User.findByIdAndUpdate(
-        req.body.userId,
+        { _id: req.body.userId},
         { $push: { thoughts: thought._id } },
         { new: true }
       );
@@ -88,7 +88,7 @@ const ThoughtController = {
   async addReaction(req, res) {
     try {
       const thought = await Thought.findByIdAndUpdate(
-        req.params.thoughtId,
+        {_id: req.params.thoughtId},
         { $push: { reactions: req.body } },
         { new: true, runValidators: true }
       );
@@ -100,6 +100,7 @@ const ThoughtController = {
       res.json(thought);
     } catch (err) {
       res.status(400).json(err);
+      console.log(err)
     }
   },
 

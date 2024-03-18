@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 
 
 // Reaction schema as a subdocument of the Thought parent (based on the model in assignment README)
@@ -6,7 +6,7 @@ const ReactionSchema = new Schema(
   {
     reactionId: {
       type: Schema.Types.ObjectId,
-      default: () => new mongoose.Types.ObjectId(), 
+      default: () => new Types.ObjectId(), 
     },
     reactionBody: {
       type: String,
